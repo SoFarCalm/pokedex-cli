@@ -67,3 +67,30 @@ func TestCommandRegistry(t *testing.T) {
 		}
 	}
 }
+
+func TestCommandMap(t *testing.T) {
+	cases := []struct {
+		commandName string
+		expected    string
+	}{
+		{
+			commandName: "map",
+			expected:    "Displays the next map",
+		},
+		{
+			commandName: "mapb",
+			expected:    "Displays the previous map",
+		},
+	}
+
+	for _, c := range cases {
+		cmd, exists := getCommands()[c.commandName]
+		if !exists {
+			t.Errorf("command %q does not exist in the commands map", c.commandName)
+			continue
+		}
+		if cmd.description != c.expected {
+			t.Errorf("command %q has description %q; want %q", c.commandName, cmd.description, c.expected)
+		}
+	}
+}
