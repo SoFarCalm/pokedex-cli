@@ -22,7 +22,7 @@ func startRepl() {
 
 		command, exists := getCommands()[commandName]
 		if exists {
-			err := command.callback()
+			err := command.callback(&currentConfig)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -43,11 +43,31 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(cfg *config) error
+}
+
+type config struct {
+	next     string
+	previous any
+}
+
+var currentConfig = config{
+	next:     "https://pokeapi.co/api/v2/location-area/",
+	previous: nil,
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"map": {
+			name:        "map",
+			description: "Displays a map of the world",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the previous map",
+			callback:    commandMapb,
+		},
 		"help": {
 			name:        "help",
 			description: "Displays a help message",
