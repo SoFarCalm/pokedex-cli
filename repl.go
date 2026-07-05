@@ -7,14 +7,12 @@ import (
 	"strings"
 
 	"github.com/SoFarCalm/pokedex-cli/internal/pokeapi"
-	"github.com/SoFarCalm/pokedex-cli/internal/pokecache"
 )
 
 type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
-	pokeapiCache     *pokecache.Cache
 }
 
 func startRepl(cfg *config) {
@@ -29,10 +27,16 @@ func startRepl(cfg *config) {
 		}
 
 		commandName := words[0]
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
+
+		args = words[1:]
 
 		command, exists := getCommands()[commandName]
 		if exists {
-			err := command.callback(cfg)
+			err := command.callback(cfg, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -53,18 +57,23 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"explore": {
+			name:        "explore",
+			description: "Explore locations",
+			callback:    commandExplore,
+		},
 		"help": {
 			name:        "help",
 			description: "Displays a help message",
 			callback:    commandHelp,
 		},
-		"map": {
-			name:        "map",
+		"mapF": {
+			name:        "mapf",
 			description: "Get the next page of locations",
 			callback:    commandMapf,
 		},
