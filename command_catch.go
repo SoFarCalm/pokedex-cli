@@ -30,7 +30,13 @@ func commandCatch(cfg *config, args ...string) error {
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
 	time.Sleep(2 * time.Second)
 	fmt.Printf("Pokeball moves back and forth...\n")
-	time.Sleep(4 * time.Second)
+	time.Sleep(1 * time.Second)
+	fmt.Println("...")
+	time.Sleep(1 * time.Second)
+	fmt.Println("...")
+	time.Sleep(1 * time.Second)
+	fmt.Println("...")
+	time.Sleep(2 * time.Second)
 
 	res := rand.Intn(pokemon.BaseExperience)
 	if res > 40 {
