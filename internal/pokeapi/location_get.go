@@ -8,7 +8,7 @@ import (
 
 // Explore Locations
 func (c *Client) ExploreLocations(locationName string) (Location, error) {
-	url := baseURL + "/location-area" + "/" + locationName
+	url := baseURL + "/location-area/" + locationName
 
 	if cachedData, exists := c.cache.Get(url); exists {
 		exploreResp := Location{}
